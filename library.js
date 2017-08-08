@@ -89,9 +89,10 @@ Library.prototype.getBooksByAuthor = function(author) {
 Library.prototype.addBooks = function(addBooksArr) {
   var numberBooksAdded = 0;
   for(i = 0; i < addBooksArr.length; i++) {         //we use this for loop to loop through the iterations of the loop we're passing through. In other words, the loop we're iterating through does not exist until we pass it into our function.
-    this.addBook(addBooksArr[i]);
+    if(this.addBook(addBooksArr[i])){
     numberBooksAdded++
     }
+  }
     return numberBooksAdded;
   };
 
