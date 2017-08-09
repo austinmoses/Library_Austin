@@ -53,7 +53,7 @@ for(var i = 0; i < this.myBookArr.length; i++) {
 //getRandomBook
 Library.prototype.getRandomBook = function() {
   var randomBook = Math.floor(Math.random()*this.myBookArr.length);
-  return this.myBookArr <= 0 ? null : this.myBookArr[randomBook];
+  return this.myBookArr.length <= 0 ? null : this.myBookArr[randomBook];
   //   if(this.myBookArr.length != 0){
   //     return this.myBookArr[Math.floor(Math.random()*this.myBookArr.length)];
   //     }
@@ -109,6 +109,13 @@ Library.prototype.addBooks = function(addBooksArr) {
       authorListArr.push(this.myBookArr[i].author);
     }
     return authorListArr;
+  };
+
+  //getRandomAuthorName
+
+  Library.prototype.getRandomAuthorName = function() {
+    var randomAuthor = Math.floor(Math.random()*this.myBookArr.length);
+    return this.myBookArr.length <= 0 ? null : this.myBookArr[randomAuthor].author;
   };
 
 var denLib = new Library();
