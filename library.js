@@ -13,10 +13,10 @@ var Book = function(oArgs) {
 Library.prototype.myBookArr = [];
 
 //Add Book
-Library.prototype.addBook = function(book) {;
+Library.prototype.addBook = function(book) {
   for(var i = 0; i < this.myBookArr.length; i++) {
     if(this.myBookArr[i].title == book.title) {
-      alert("Book Already in Library");
+      alert("At Least One Book Already in Library");
       return false;
     }
   }
@@ -74,14 +74,14 @@ Library.prototype.getBookByTitle = function(title) {
 
 //getBooksByAuthor
 Library.prototype.getBooksByAuthor = function(author) {
-  var authorArr = new Array();
+  var byAuthorArr = new Array();
   var reg = new RegExp(author, "gi");
   for(i = 0; i < this.myBookArr.length; i++) {
     if(this.myBookArr[i].author.match(reg)) {
-      authorArr.push(this.myBookArr[i]);
+      byAuthorArr.push(this.myBookArr[i]);
     }
   }
-  return authorArr;
+  return byAuthorArr;
 };
 
 //addBooks
@@ -94,6 +94,21 @@ Library.prototype.addBooks = function(addBooksArr) {
     }
   }
     return numberBooksAdded;
+  };
+
+  //getAuthors
+
+  Library.prototype.getAuthors = function() {
+    var authorListArr = new Array();
+    loop: for(i = 0; i < this.myBookArr.length; i++) {
+      for(a = 0; a < authorListArr.length; a++) {
+      if(this.myBookArr[i].author == authorListArr[a]) {
+        break loop;
+        }
+      }
+      authorListArr.push(this.myBookArr[i].author);
+    }
+    return authorListArr;
   };
 
 var denLib = new Library();
