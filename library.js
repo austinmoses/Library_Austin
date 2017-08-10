@@ -1,5 +1,6 @@
-var Library = function() {
+var Library = function(city) {
   this.myBookArr = new Array();
+  this.instanceKey = city;
 };
 
 var Book = function(oArgs) {
@@ -113,11 +114,27 @@ Library.prototype.addBooks = function(addBooksArr) {
     return this.myBookArr.length <= 0 ? null : this.myBookArr[randomAuthor].author;
   };
 
-var denLib = new Library();
-var boulLib = new Library();
+var denverLib = new Library("Denver");
+var boulderLib = new Library("Boulder");
+var goldenLib = new Library("Golden");
+var littletonLib = new Library("Littleton");
+var parkerLib = new Library("Parker");
+var auroraLib = new Library("Aurora");
+var coSpringsLib = new Library("CoSprings");
 
-var BookOne = new Book({title: "IT", author: "Stephen King", numPages: 390, date: "05/05/1999"});
-var BookTwo = new Book({title: "Harry Potter", author: "JK Rowling", numPages: 400, date: "05/05/2000"});
+var BookOne = new Book({title: "IT", author: "Stephen King", numPages: 1138, date: "09/01/1986"});
+var BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", author: "JK Rowling", numPages: 400, date: "09/01/1998"});
 var BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
-var BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "05/05/2001"});
-var BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "06/30/1970"});
+var BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "06/02/1999"});
+var BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "04/10/1925"});
+var BookSix = new Book({title: "This Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
+var BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
+
+
+var storage = function(libInstance) {
+  localStorage.setItem(libInstance.instanceKey, JSON.stringify(libInstance.myBookArr));
+};
+
+var retrieve = function(libInstance) {
+  localStorage.getItem(libInstance.instanceKey, JSON.parse(libInstance.myBookArr));
+};
