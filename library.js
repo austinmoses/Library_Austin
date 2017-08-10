@@ -25,8 +25,9 @@ Library.prototype.addBook = function(book) {
 //////////////////////////////////////////////////////////////removeBookByTitle////////////////////////////////////////////////////////////////
 Library.prototype.removeBookByTitle = function(title) {
 var bool = false;
+var reg = new RegExp(title, "gi")
 for(var i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].title == title) {
+  if(this.myBookArr[i].title.match(reg)) {
     this.myBookArr.splice(i,1);
     bool = true;
     }
@@ -37,8 +38,9 @@ for(var i = 0; i < this.myBookArr.length; i++) {
 //////////////////////////////////////////////////////////////////removeBookByAuthor/////////////////////////////////////////////////////////////
 Library.prototype.removeBookByAuthor = function(author) {
 var bool = false;
+var reg = new RegExp(author, "gi")
 for(var i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].author == author) {
+  if(this.myBookArr[i].author.match(reg)) {
     this.myBookArr.splice(i,1);
     bool = true;
     }
@@ -94,8 +96,8 @@ Library.prototype.addBooks = function(addBooksArr) {
   //////////////////////////////////////////////////////////////getAuthors/////////////////////////////////////////////////////////////////////
   Library.prototype.getAuthors = function() {
     var authorListArr = new Array();
-    for(i = 0; i < this.myBookArr.length; i++) {
-      loop: for(a = 0; a < authorListArr.length; a++) {
+    for(i = 0; i < this.myBookArr.length; i++) loop: {
+     for(a = 0; a < authorListArr.length; a++) {
       if(this.myBookArr[i].author == authorListArr[a]) {
         break loop;
         }
@@ -118,4 +120,4 @@ var BookOne = new Book({title: "IT", author: "Stephen King", numPages: 390, date
 var BookTwo = new Book({title: "Harry Potter", author: "JK Rowling", numPages: 400, date: "05/05/2000"});
 var BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
 var BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "05/05/2001"});
-var BookFive = new Book({title: "The Great Gatsby", author: "Some Asshole", numPages: 215, date: "06/30/1970"});
+var BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "06/30/1970"});
