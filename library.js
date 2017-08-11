@@ -8,7 +8,6 @@ var Book = function(oArgs) {
   this.author = oArgs.author;
   this.numPages = oArgs.numPages;
   this.pDate = new Date(oArgs.date);
-  // this.pubDate = new Date(this.aDate[0], this.aDate[1]);
 };
 
 /////////////////////////////////////////////////////////////Add Book/////////////////////////////////////////////////////////////////
@@ -114,14 +113,71 @@ Library.prototype.addBooks = function(addBooksArr) {
     return this.myBookArr.length <= 0 ? null : this.myBookArr[randomAuthor].author;
   };
 
-var denverLib = new Library("Denver");
-var boulderLib = new Library("Boulder");
-var goldenLib = new Library("Golden");
-var littletonLib = new Library("Littleton");
-var parkerLib = new Library("Parker");
-var auroraLib = new Library("Aurora");
-var coSpringsLib = new Library("CoSprings");
+/////////////////////////////////////////////////////////Search/////////////////////////////////////////////////////////////////////////////
 
+Library.prototype.search = function(titleInput, authorInput, pagesInput) {
+  var searchResults = new Array();
+  if(titleInput && authorInput && pagesInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (this.myBookArr[i].title.match(RegExp(titleInput, "gi")) && this.myBookArr[i].author.match(RegExp(authorInput, "gi")) && String(this.myBookArr[i].numPages).match(RegExp(pagesInput, "gi"))) {
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  else if(titleInput && authorInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (this.myBookArr[i].title.match(RegExp(titleInput, "gi")) && this.myBookArr[i].author.match(RegExp(authorInput, "gi"))) {
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  else if(titleInput && pagesInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (this.myBookArr[i].title.match(RegExp(titleInput, "gi")) && String(this.myBookArr[i].numPages).match(RegExp(pagesInput, "gi"))) {
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  else if(authorInput && pagesInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (this.myBookArr[i].author.match(RegExp(authorInput, "gi")) && String(this.myBookArr[i].numPages).match(RegExp(pagesInput, "gi"))) {
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  else if(titleInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (this.myBookArr[i].title.match(RegExp(titleInput, "gi"))){
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  else if(authorInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (this.myBookArr[i].author.match(RegExp(authorInput, "gi"))){
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  else if(pagesInput) {
+    for(i = 0; i < this.myBookArr.length; i++) {
+      if (String(this.myBookArr[i].numPages).match(RegExp(pagesInput, "gi"))){
+        searchResults.push(this.myBookArr[i]);
+      }
+    }
+  }
+  return searchResults;
+};
+
+//////////////////////////////////////////////////////////////Library Instances//////////////////////////////////////////////////////////////
+var denverLib = new Library("denver");
+var boulderLib = new Library("boulder");
+var goldenLib = new Library("golden");
+var littletonLib = new Library("littleton");
+var parkerLib = new Library("parker");
+var auroraLib = new Library("aurora");
+var coSpringsLib = new Library("coSprings");
+////////////////////////////////////////////////////////////////Books//////////////////////////////////////////////////////////////////////
 var BookOne = new Book({title: "IT", author: "Stephen King", numPages: 1138, date: "09/01/1986"});
 var BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", author: "JK Rowling", numPages: 400, date: "09/01/1998"});
 var BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
@@ -130,11 +186,12 @@ var BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald
 var BookSix = new Book({title: "This Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
 var BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
 
-
-var storage = function(libInstance) {
-  localStorage.setItem(libInstance.instanceKey, JSON.stringify(libInstance.myBookArr));
+///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
+ Library.prototype.storage = function(libInstance) {
+   var storageContainer = JSON.stringify(libInstance.myBookArr);
+  localStorage.setItem(libInstance.instanceKey, storageContainer);
 };
 
-var retrieve = function(libInstance) {
-  localStorage.getItem(libInstance.instanceKey, JSON.parse(libInstance.myBookArr));
+Library.prototype.retrieve = function(libInstance) {
+  return JSON.parse(localStorage.getItem(this.instanceKey));
 };
