@@ -12,7 +12,7 @@ var Book = function(oArgs) {
 
 /////////////////////////////////////////////////////////////Add Book/////////////////////////////////////////////////////////////////
 Library.prototype.addBook = function(book) {
-  for(var i = 0; i < this.myBookArr.length; i++) {
+  for(i = 0; i < this.myBookArr.length; i++) {
     if(this.myBookArr[i].title == book.title) {
       alert("At Least One Book Already in Library");
       return false;
@@ -26,7 +26,7 @@ Library.prototype.addBook = function(book) {
 Library.prototype.removeBookByTitle = function(title) {
 var bool = false;
 // var reg = new RegExp(title, "gi")
-for(var i = 0; i < this.myBookArr.length; i++) {
+for(i = 0; i < this.myBookArr.length; i++) {
   if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title) {
     this.myBookArr.splice(i,1);
     bool = true;
@@ -39,7 +39,7 @@ for(var i = 0; i < this.myBookArr.length; i++) {
 Library.prototype.removeBookByAuthor = function(author) {
 var bool = false;
 // var reg = new RegExp(author, "gi")
-for(var i = 0; i < this.myBookArr.length; i++) {
+for(i = 0; i < this.myBookArr.length; i++) {
   if(this.myBookArr[i].author.toLowerCase().indexOf(author.toLowerCase()) > -1 && author) {
     this.myBookArr.splice(i,1);
     bool = true;
@@ -62,7 +62,7 @@ Library.prototype.getRandomBook = function() {
 Library.prototype.getBookByTitle = function(title) {
   var titleArr = new Array();
   // var reg = new RegExp(title, "gi");
-  for(var i = 0; i < this.myBookArr.length; i++) {
+  for(i = 0; i < this.myBookArr.length; i++) {
     if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase() > -1 && title)) {
     titleArr.push(this.myBookArr[i]);
       }
