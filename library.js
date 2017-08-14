@@ -3,6 +3,24 @@ var Library = function(city) {
   this.instanceKey = city;
 };
 
+Library.prototype.init = function(){
+  this._bindEvents();
+};
+
+Library.prototype._bindEvents = function() {
+  var _self = this;
+    document.getElementById("searchSubmit").addEventListener("click", function(evt){_self.validateSearch.call(_self, evt);});
+};
+
+Library.prototype.validateSearch = function(e) {
+  e.preventDefault();
+  var titleInput = document.getElementById("titleInput").value == "" ? null : document.getElementById("titleInput").value;
+  var authorInput = document.getElementById("authorInput").value == "" ? null : document.getElementById("authorInput").value;
+  var pagesInput = document.getElementById("pagesInput").value == "" ? null : document.getElementById("pagesInput").value;
+
+  this.search(titleInput, authorInput, pagesInput);
+};
+
 var Book = function(oArgs) {
   this.title = oArgs.title;
   this.author = oArgs.author;
@@ -25,9 +43,9 @@ Library.prototype.addBook = function(book) {
 //////////////////////////////////////////////////////////////removeBookByTitle////////////////////////////////////////////////////////////////
 Library.prototype.removeBookByTitle = function(title) {
 var bool = false;
-var reg = new RegExp(title, "gi")
+// var reg = new RegExp(title, "gi")
 for(var i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].title.match(reg)) {
+  if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title) {
     this.myBookArr.splice(i,1);
     bool = true;
     }
@@ -38,9 +56,9 @@ for(var i = 0; i < this.myBookArr.length; i++) {
 //////////////////////////////////////////////////////////////////removeBookByAuthor/////////////////////////////////////////////////////////////
 Library.prototype.removeBookByAuthor = function(author) {
 var bool = false;
-var reg = new RegExp(author, "gi")
+// var reg = new RegExp(author, "gi")
 for(var i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].author.match(reg)) {
+  if(this.myBookArr[i].author.toLowerCase().indexOf(author.toLowerCase()) > -1 && author) {
     this.myBookArr.splice(i,1);
     bool = true;
     }
@@ -61,9 +79,9 @@ Library.prototype.getRandomBook = function() {
 /////////////////////////////////////////////////////////////getBookByTitle/////////////////////////////////////////////////////////////////////
 Library.prototype.getBookByTitle = function(title) {
   var titleArr = new Array();
-  var reg = new RegExp(title, "gi");
+  // var reg = new RegExp(title, "gi");
   for(var i = 0; i < this.myBookArr.length; i++) {
-    if(this.myBookArr[i].title.match(reg)) {
+    if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase() > -1 && title)) {
     titleArr.push(this.myBookArr[i]);
       }
     }
@@ -73,9 +91,9 @@ Library.prototype.getBookByTitle = function(title) {
 /////////////////////////////////////////////////////////getBooksByAuthor////////////////////////////////////////////////////////////////////////
 Library.prototype.getBooksByAuthor = function(author) {
   var byAuthorArr = new Array();
-  var reg = new RegExp(author, "gi");
+  // var reg = new RegExp(author, "gi");
   for(i = 0; i < this.myBookArr.length; i++) {
-    if(this.myBookArr[i].author.match(reg)) {
+    if(this.myBookArr[i].author.toLowerCase().indexOf(author.toLowerCase()) > -1 && author) {
       byAuthorArr.push(this.myBookArr[i]);
     }
   }
@@ -115,11 +133,17 @@ Library.prototype.addBooks = function(addBooksArr) {
 
 /////////////////////////////////////////////////////////Search/////////////////////////////////////////////////////////////////////////////
 
+
+// Library.prototype.searchSubmit = function() {
+//   document.getElementById("searchSubmit").onclick(valdiateSearch());
+// };
+
 Library.prototype.search = function(titleInput, authorInput, pagesInput) {
   var searchResults = new Array();
+  alert(titleInput);// console.log(titleInput);
   if(titleInput && authorInput && pagesInput) {
     for(i = 0; i < this.myBookArr.length; i++) {
-      if (this.myBookArr[i].title.match(RegExp(titleInput, "gi")) && this.myBookArr[i].author.match(RegExp(authorInput, "gi")) && String(this.myBookArr[i].numPages).match(RegExp(pagesInput, "gi"))) {
+      if (this.myBookArr[i].title.toLowerCase().match(RegExp(titleInput, "gi")) && this.myBookArr[i].author.match(RegExp(authorInput, "gi")) && String(this.myBookArr[i].numPages).match(RegExp(pagesInput, "gi"))) {
         searchResults.push(this.myBookArr[i]);
       }
     }
@@ -168,6 +192,7 @@ Library.prototype.search = function(titleInput, authorInput, pagesInput) {
   }
   return searchResults;
 };
+
 
 //////////////////////////////////////////////////////////////Library Instances//////////////////////////////////////////////////////////////
 var denverLib = new Library("denver");
