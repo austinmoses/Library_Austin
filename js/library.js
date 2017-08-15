@@ -1,9 +1,49 @@
-var Library = function(city) {
+var Library = function(city){
   this.myBookArr = new Array();
   this.instanceKey = city;
 };
 
-var Book = function(oArgs) {
+Library.prototype.init = function(){
+  //cache selectors into variables
+  this._bindEvents();
+  this._checkLocalStorage(); //recycle retreive() (get)
+  //call function to populate book array if localstorage has our book array.
+};
+
+Library.prototype._bindEvents = function(){
+  $("button.get-my-name").on("click", $.proxy(this._handleGetMyName, this)); //"this._handleGetMyName" would refer to the wrong thing. wrapping it in proxy resets referral
+};
+
+Library.prototype._checkLocalStorage = function(){
+  var libLoad = JSON.parse(localStorage.getItem("denver"));
+    console.log(libLoad);
+  this._loadLibrary(libLoad);
+};
+
+Library.prototype._loadLibrary = function(storageLoad){
+  var $libTable = $("libTable");
+  var newRow = $("<tr>");
+  for(var i = 0; i < storageLoad.length; i++){
+    var titleLoad = $("<td>").text(storageLoad[i].title);
+    var authorLoad = $("<td>").text(storageLoad[i].author);
+    var pagesLoad = $("<td>").text(storageLoad[i].numPages);
+    var pDateLoad = $("<td>").text(storageLoad[i].pDate);
+
+    $libTable.append(newRow);
+    newRow.append(titleLoad);
+    newRow.append(authorLoad);
+    newRow.append(pagesLoad);
+    newRow.append(pDateLoad);
+
+  }
+};
+
+Library.prototype._handleGetMyName = function(){
+  var inputVal = $("input.my-name").val();
+  alert(inputVal);
+};
+
+var Book = function(oArgs){
   this.title = oArgs.title;
   this.author = oArgs.author;
   this.numPages = oArgs.numPages;
@@ -11,9 +51,9 @@ var Book = function(oArgs) {
 };
 
 /////////////////////////////////////////////////////////////Add Book/////////////////////////////////////////////////////////////////
-Library.prototype.addBook = function(book) {
-  for(i = 0; i < this.myBookArr.length; i++) {
-    if(this.myBookArr[i].title == book.title) {
+Library.prototype.addBook = function(book){
+  for(i = 0; i < this.myBookArr.length; i++){
+    if(this.myBookArr[i].title == book.title){
       alert("At Least One Book Already in Library");
       return false;
     }
@@ -23,11 +63,11 @@ Library.prototype.addBook = function(book) {
 };
 
 //////////////////////////////////////////////////////////////removeBookByTitle////////////////////////////////////////////////////////////////
-Library.prototype.removeBookByTitle = function(title) {
+Library.prototype.removeBookByTitle = function(title){
 var bool = false;
 // var reg = new RegExp(title, "gi")
-for(i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title) {
+for(i = 0; i < this.myBookArr.length; i++){
+  if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title){
     this.myBookArr.splice(i,1);
     bool = true;
     }
@@ -183,23 +223,26 @@ Library.prototype.search = function(titleInput, authorInput, pagesInput) {
 
 
 //////////////////////////////////////////////////////////////Library Instances//////////////////////////////////////////////////////////////
-// $(function(){ //document ready
+$(function(){ //document ready
 window.denverLib = new Library("denver");
+window.denverLib.init();
+
 window.boulderLib = new Library("boulder");
-window.goldenLib = new Library("golden");
-window.littletonLib = new Library("littleton");
-window.parkerLib = new Library("parker");
-window.auroraLib = new Library("aurora");
-window.coSpringsLib = new Library("coSprings");
-// });
+window.boulderLib.init();
+// window.goldenLib = new Library("golden");
+// window.littletonLib = new Library("littleton");
+// window.parkerLib = new Library("parker");
+// window.auroraLib = new Library("aurora");
+// window.coSpringsLib = new Library("coSprings");
+});
 ////////////////////////////////////////////////////////////////Books//////////////////////////////////////////////////////////////////////
-var BookOne = new Book({title: "IT", author: "Stephen King", numPages: 1138, date: "09/01/1986"});
-var BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", author: "JK Rowling", numPages: 400, date: "09/01/1998"});
-var BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
-var BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "06/02/1999"});
-var BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "04/10/1925"});
-var BookSix = new Book({title: "This Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
-var BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
+window.BookOne = new Book({title: "IT", author: "Stephen King", numPages: 1138, date: "09/01/1986"});
+window.BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", author: "JK Rowling", numPages: 400, date: "09/01/1998"});
+window.BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
+window.BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "06/02/1999"});
+window.BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "04/10/1925"});
+window.BookSix = new Book({title: "This Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
+window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
 
 ///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
  Library.prototype.storage = function(libInstance) {
