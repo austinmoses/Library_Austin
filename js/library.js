@@ -5,42 +5,67 @@ var Library = function(city){
 
 Library.prototype.init = function(){
   //cache selectors into variables
+  this._checkLocalStorage();
   this._bindEvents();
-  this._checkLocalStorage(); //recycle retreive() (get)
+   //recycle retreive() (get)
   //call function to populate book array if localstorage has our book array.
 };
 
 Library.prototype._bindEvents = function(){
   $("button.get-my-name").on("click", $.proxy(this._handleGetMyName, this)); //"this._handleGetMyName" would refer to the wrong thing. wrapping it in proxy resets referral
+  $("#book-by-title-expand").click(function(){
+    $("#book-by-title-content").slideToggle();
+  });
+  $("#book-by-author-expand").click(function(){
+    $("#book-by-author-content").slideToggle();
+  });
+  $("#add-book-expand").click(function(){
+    $("#add-book-content").slideToggle();
+  });
+  $("#remove-book-expand").click(function(){
+    $("#remove-book-content").slideToggle();
+  });
+  $("#add-books-button").on("click", $.proxy(this.addBookForm, this));
+  $("#remove-title-button").on("click", $.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));//$.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));
 };
 
 Library.prototype._checkLocalStorage = function(){
-  var libLoad = JSON.parse(localStorage.getItem("denver"));
-    console.log(libLoad);
-  this._loadLibrary(libLoad);
+  var libLoad = JSON.parse(localStorage.getItem("denver")) || this._autoPush();
+  this.myBookArr = libLoad;
+  this._loadLibrary();
 };
 
-Library.prototype._loadLibrary = function(storageLoad){
-  var $libTable = $("libTable");
-  var newRow = $("<tr>");
-  for(var i = 0; i < storageLoad.length; i++){
-    var titleLoad = $("<td>").text(storageLoad[i].title);
-    var authorLoad = $("<td>").text(storageLoad[i].author);
-    var pagesLoad = $("<td>").text(storageLoad[i].numPages);
-    var pDateLoad = $("<td>").text(storageLoad[i].pDate);
+Library.prototype._loadLibrary = function(){
+  var $libTable = $("#libTable");
+  for(var i = 0; i < this.myBookArr.length; i++){
+    var newRow = $("<tr>");
+    var titleLoad = $("<td>").text(this.myBookArr[i].title);
+    var authorLoad = $("<td>").text(this.myBookArr[i].author);
+    var pagesLoad = $("<td>").text(this.myBookArr[i].numPages);
+    var pDateLoad = $("<td>").text(this.myBookArr[i].pDate);
 
-    $libTable.append(newRow);
     newRow.append(titleLoad);
     newRow.append(authorLoad);
     newRow.append(pagesLoad);
     newRow.append(pDateLoad);
-
+    $libTable.append(newRow);
   }
 };
 
 Library.prototype._handleGetMyName = function(){
   var inputVal = $("input.my-name").val();
   alert(inputVal);
+};
+
+Library.prototype.addBookForm = function(){
+  var addBookForm = $("#add-book-form");
+  var newForm = $('<form class="form-inline">')
+
+  $(newForm).append('<input type="text" class="form-control" placeholder="Title"/>');
+  $(newForm).append('<input type="text" class="form-control" placeholder="Author"/>');
+  $(newForm).append('<input type="text" class="form-control" placeholder="Page Length"/>');
+  $(newForm).append('<input type="text" class="form-control" placeholder="Publcation Date"/><br></br>');
+  $("#add-book-form").append(newForm);
 };
 
 var Book = function(oArgs){
@@ -54,7 +79,7 @@ var Book = function(oArgs){
 Library.prototype.addBook = function(book){
   for(i = 0; i < this.myBookArr.length; i++){
     if(this.myBookArr[i].title == book.title){
-      alert("At Least One Book Already in Library");
+      // alert("At Least One Book Already in Library");
       return false;
     }
   }
@@ -69,6 +94,7 @@ var bool = false;
 for(i = 0; i < this.myBookArr.length; i++){
   if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title){
     this.myBookArr.splice(i,1);
+    this._autoPush();
     bool = true;
     }
   }
@@ -227,8 +253,8 @@ $(function(){ //document ready
 window.denverLib = new Library("denver");
 window.denverLib.init();
 
-window.boulderLib = new Library("boulder");
-window.boulderLib.init();
+// window.boulderLib = new Library("boulder");
+// window.boulderLib.init();
 // window.goldenLib = new Library("golden");
 // window.littletonLib = new Library("littleton");
 // window.parkerLib = new Library("parker");
@@ -245,11 +271,15 @@ window.BookSix = new Book({title: "This Shining", author: "Stephen King", numPag
 window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
 
 ///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
- Library.prototype.storage = function(libInstance) {
-   var storageContainer = JSON.stringify(libInstance.myBookArr);
-  localStorage.setItem(libInstance.instanceKey, storageContainer);
+
+Library.prototype._autoPush = function () {
+  this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
+  var storageContainer = JSON.stringify(this.myBookArr);
+  localStorage.setItem(this.instanceKey, storageContainer);
+  this._loadLibrary();
+  return false;
 };
 
-Library.prototype.retrieve = function(libInstance) {
-  return JSON.parse(localStorage.getItem(this.instanceKey));
-};
+// Library.prototype.retrieve = function(libInstance) {
+//   return JSON.parse(localStorage.getItem(this.instanceKey));
+// };
