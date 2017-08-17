@@ -5,6 +5,7 @@ var Library = function(city){
 
 Library.prototype.init = function(){
   //cache selectors into variables
+  this._autoLoadArray();
   this._checkLocalStorage();
   this._bindEvents();
    //recycle retreive() (get)
@@ -26,17 +27,30 @@ Library.prototype._bindEvents = function(){
     $("#remove-book-content").slideToggle();
   });
   $("#add-books-button").on("click", $.proxy(this.addBookForm, this));
-  $("#remove-title-button").on("click", $.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));//$.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));
+  $("#remove-title-button").on("click", $.proxy(this.removeBookByTitle, this));//$.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));
 };
 
 Library.prototype._checkLocalStorage = function(){
-  var libLoad = JSON.parse(localStorage.getItem("denver")) || this._autoPush();
+  var libLoad = JSON.parse(localStorage.getItem(this.instanceKey)) || this._autoPush();
   this.myBookArr = libLoad;
   this._loadLibrary();
 };
 
 Library.prototype._loadLibrary = function(){
-  var $libTable = $("#libTable");
+  var libTableNew = $("<table class='table table-bordered'>");
+  var newTableHead = $("<tr>");
+
+  var titleHead = $("<th>").text("Title");
+  var authorHead = $("<th>").text("Author");
+  var pagesHead = $("<th>").text("Page Length");
+  var dateHead = $("<th>").text("Publication Date");
+
+  newTableHead.append(titleHead);
+  newTableHead.append(authorHead);
+  newTableHead.append(pagesHead);
+  newTableHead.append(dateHead);
+  libTableNew.append(newTableHead);
+
   for(var i = 0; i < this.myBookArr.length; i++){
     var newRow = $("<tr>");
     var titleLoad = $("<td>").text(this.myBookArr[i].title);
@@ -48,8 +62,9 @@ Library.prototype._loadLibrary = function(){
     newRow.append(authorLoad);
     newRow.append(pagesLoad);
     newRow.append(pDateLoad);
-    $libTable.append(newRow);
+    libTableNew.append(newRow);
   }
+  $("#libTable").html(libTableNew)
 };
 
 Library.prototype._handleGetMyName = function(){
@@ -90,11 +105,12 @@ Library.prototype.addBook = function(book){
 //////////////////////////////////////////////////////////////removeBookByTitle////////////////////////////////////////////////////////////////
 Library.prototype.removeBookByTitle = function(title){
 var bool = false;
+var title = $("#remove-title-input").val();
 // var reg = new RegExp(title, "gi")
 for(i = 0; i < this.myBookArr.length; i++){
   if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title){
     this.myBookArr.splice(i,1);
-    this._autoPush();
+    this._checkLocalStorage();
     bool = true;
     }
   }
@@ -273,11 +289,13 @@ window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 
 ///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
 
 Library.prototype._autoPush = function () {
-  this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
   var storageContainer = JSON.stringify(this.myBookArr);
   localStorage.setItem(this.instanceKey, storageContainer);
-  this._loadLibrary();
   return false;
+};
+
+Library.prototype._autoLoadArray = function(){
+  this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
 };
 
 // Library.prototype.retrieve = function(libInstance) {
