@@ -30,6 +30,7 @@ Library.prototype._bindEvents = function(){
   $("#remove-title-button").on("click", $.proxy(this.removeBookByTitle, this));//$.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));
   $("#remove-author-button").on("click", $.proxy(this.removeBookByAuthor, this));
   $("#get-authors").on("click", $.proxy(this.getAuthors, this));
+  $("#get-random-book").on("click", $.proxy(this.getRandomBook, this));
 };
 
 Library.prototype._checkLocalStorage = function(){
@@ -39,7 +40,7 @@ Library.prototype._checkLocalStorage = function(){
 };
 
 Library.prototype._loadLibrary = function(screen){ //main Library Jumbotron
-  var libTableNew = $("<table class='table table-bordered'>");
+  var libTableNew = $("<table>").addClass("table table-bordered");
   var newTableHead = $("<tr>");
 
   var titleHead = $("<th>").text("Title");
@@ -85,10 +86,6 @@ Library.prototype.addBookForm = function(){
   $("#add-book-form").append(newForm);
 };
 
-Library.prototype._handleGetMyName = function(){
-  var inputVal = $("input.my-name").val();
-  alert(inputVal);
-};
 
 var Book = function(oArgs){
   this.title = oArgs.title;
@@ -145,8 +142,14 @@ for(i = 0; i < this.myBookArr.length; i++) {
 Library.prototype.getRandomBook = function() {
   var randomBook = Math.floor(Math.random()*this.myBookArr.length);
   var randomBookDisplay = this.myBookArr.length <= 0 ? null : this.myBookArr[randomBook];
-  this._loadLibrary
-
+  var randomBookTable = $("<table>");
+  var randomBookRow = $("<tr>");
+  var randomBookTitle = $("<td>"+randomBookDisplay.title+"</td>");
+  var randomBookAuthor = $("<td>"+randomBookDisplay.author+"</td>");
+  var div = $("<div>"+randomBookDisplay+"</div>").addClass("remove-item");
+  $(".remove-item").remove();
+  $("#results-jumbotron").append(div);
+  console.log(randomBookDisplay.title);
 };
 
 /////////////////////////////////////////////////////////////getBookByTitle/////////////////////////////////////////////////////////////////////
@@ -194,9 +197,12 @@ Library.prototype.addBooks = function(addBooksArr) {
         }
       }
       authorListArr.push(this.myBookArr[i].author);
-
     }
-    $("#results-jumbotron").html(authorListArr);
+    $(".remove-item").remove();
+    for(var i = 0; i < authorListArr.length; i++){
+      div = $("<div>"+authorListArr[i]+"</div>").addClass("remove-item");
+    $("#results-jumbotron").append(div);
+    }
   };
 
   //////////////////////////////////////////////////////////getRandomAuthorName///////////////////////////////////////////////////////////////
