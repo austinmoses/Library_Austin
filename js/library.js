@@ -28,15 +28,17 @@ Library.prototype._bindEvents = function(){
   });
   $("#add-books-button").on("click", $.proxy(this.addBookForm, this));
   $("#remove-title-button").on("click", $.proxy(this.removeBookByTitle, this));//$.proxy(this.removeBookByTitle($("#remove-title-input").val()), this));
+  $("#remove-author-button").on("click", $.proxy(this.removeBookByAuthor, this));
+  $("#get-authors").on("click", $.proxy(this.getAuthors, this));
 };
 
 Library.prototype._checkLocalStorage = function(){
   var libLoad = JSON.parse(localStorage.getItem(this.instanceKey)) || this._autoPush();
   this.myBookArr = libLoad;
-  this._loadLibrary();
+  this._loadLibrary($("#libTable"));
 };
 
-Library.prototype._loadLibrary = function(){
+Library.prototype._loadLibrary = function(screen){ //main Library Jumbotron
   var libTableNew = $("<table class='table table-bordered'>");
   var newTableHead = $("<tr>");
 
@@ -64,7 +66,7 @@ Library.prototype._loadLibrary = function(){
     newRow.append(pDateLoad);
     libTableNew.append(newRow);
   }
-  $("#libTable").html(libTableNew)
+  screen.html(libTableNew)
 };
 
 Library.prototype._handleGetMyName = function(){
@@ -81,6 +83,11 @@ Library.prototype.addBookForm = function(){
   $(newForm).append('<input type="text" class="form-control" placeholder="Page Length"/>');
   $(newForm).append('<input type="text" class="form-control" placeholder="Publcation Date"/><br></br>');
   $("#add-book-form").append(newForm);
+};
+
+Library.prototype._handleGetMyName = function(){
+  var inputVal = $("input.my-name").val();
+  alert(inputVal);
 };
 
 var Book = function(oArgs){
@@ -103,13 +110,14 @@ Library.prototype.addBook = function(book){
 };
 
 //////////////////////////////////////////////////////////////removeBookByTitle////////////////////////////////////////////////////////////////
-Library.prototype.removeBookByTitle = function(title){
+Library.prototype.removeBookByTitle = function(){
 var bool = false;
-var title = $("#remove-title-input").val();
+var titleRemoveIn = $("#remove-title-input").val();
 // var reg = new RegExp(title, "gi")
 for(i = 0; i < this.myBookArr.length; i++){
-  if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase()) > -1 && title){
+  if(this.myBookArr[i].title.toLowerCase().indexOf(titleRemoveIn.toLowerCase()) > -1 && titleRemoveIn){
     this.myBookArr.splice(i,1);
+    this._autoPush();
     this._checkLocalStorage();
     bool = true;
     }
@@ -118,12 +126,15 @@ for(i = 0; i < this.myBookArr.length; i++){
 };
 
 //////////////////////////////////////////////////////////////////removeBookByAuthor/////////////////////////////////////////////////////////////
-Library.prototype.removeBookByAuthor = function(author) {
+Library.prototype.removeBookByAuthor = function() {
 var bool = false;
+var authorRemoveIn = $("#remove-author-input").val();
 // var reg = new RegExp(author, "gi")
 for(i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].author.toLowerCase().indexOf(author.toLowerCase()) > -1 && author) {
+  if(this.myBookArr[i].author.toLowerCase().indexOf(authorRemoveIn.toLowerCase()) > -1 && authorRemoveIn) {
     this.myBookArr.splice(i,1);
+    this._autoPush();
+    this._checkLocalStorage();
     bool = true;
     }
   }
@@ -133,11 +144,9 @@ for(i = 0; i < this.myBookArr.length; i++) {
 /////////////////////////////////////////////////////////////////getRandomBook///////////////////////////////////////////////////////////////////
 Library.prototype.getRandomBook = function() {
   var randomBook = Math.floor(Math.random()*this.myBookArr.length);
-  return this.myBookArr.length <= 0 ? null : this.myBookArr[randomBook];
-  //   if(this.myBookArr.length != 0){
-  //     return this.myBookArr[Math.floor(Math.random()*this.myBookArr.length)];
-  //     }
-  // return null;
+  var randomBookDisplay = this.myBookArr.length <= 0 ? null : this.myBookArr[randomBook];
+  this._loadLibrary
+
 };
 
 /////////////////////////////////////////////////////////////getBookByTitle/////////////////////////////////////////////////////////////////////
@@ -185,8 +194,9 @@ Library.prototype.addBooks = function(addBooksArr) {
         }
       }
       authorListArr.push(this.myBookArr[i].author);
+
     }
-    return authorListArr;
+    $("#results-jumbotron").html(authorListArr);
   };
 
   //////////////////////////////////////////////////////////getRandomAuthorName///////////////////////////////////////////////////////////////
@@ -291,7 +301,6 @@ window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 
 Library.prototype._autoPush = function () {
   var storageContainer = JSON.stringify(this.myBookArr);
   localStorage.setItem(this.instanceKey, storageContainer);
-  return false;
 };
 
 Library.prototype._autoLoadArray = function(){
