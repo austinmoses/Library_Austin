@@ -31,6 +31,8 @@ Library.prototype._bindEvents = function(){
   $("#remove-author-button").on("click", $.proxy(this.removeBookByAuthor, this));
   $("#get-authors").on("click", $.proxy(this.getAuthors, this));
   $("#get-random-book").on("click", $.proxy(this.getRandomBook, this));
+  $("#get-book-by-title").on("click", $.proxy(this.getBookByTitle, this));
+  $("#get-random-author").on("click", $.proxy(this.getRandomAuthorName, this))
 };
 
 Library.prototype._checkLocalStorage = function(){
@@ -142,26 +144,36 @@ for(i = 0; i < this.myBookArr.length; i++) {
 Library.prototype.getRandomBook = function() {
   var randomBook = Math.floor(Math.random()*this.myBookArr.length);
   var randomBookDisplay = this.myBookArr.length <= 0 ? null : this.myBookArr[randomBook];
-  var randomBookTable = $("<table>");
-  var randomBookRow = $("<tr>");
-  var randomBookTitle = $("<td>"+randomBookDisplay.title+"</td>");
-  var randomBookAuthor = $("<td>"+randomBookDisplay.author+"</td>");
-  var div = $("<div>"+randomBookDisplay+"</div>").addClass("remove-item");
+  var randomBookTitle = $(document.createTextNode("Title: "+randomBookDisplay.title));
+  var randomBookAuthor = $(document.createTextNode("Author: "+randomBookDisplay.author));
+  var randomBookPages = $(document.createTextNode("Page Length: "+randomBookDisplay.numPages));
+  var randomBookDate = $(document.createTextNode("Publication Date: "+randomBookDisplay.pDate));
   $(".remove-item").remove();
-  $("#results-jumbotron").append(div);
-  console.log(randomBookDisplay.title);
+  var randomDiv = $("<div>").addClass("remove-item");
+  $(randomDiv).append(randomBookTitle);
+  $(randomDiv).append(randomBookAuthor);
+  $(randomDiv).append(randomBookPages);
+  $(randomDiv).append(randomBookDate);
+  $("#results-jumbotron").append(randomDiv);
+  console.log(randomDiv);
 };
 
 /////////////////////////////////////////////////////////////getBookByTitle/////////////////////////////////////////////////////////////////////
-Library.prototype.getBookByTitle = function(title) {
+Library.prototype.getBookByTitle = function() {
   var titleArr = new Array();
+  var getTitleInput = $("#book-by-title-input").val();
   // var reg = new RegExp(title, "gi");
   for(i = 0; i < this.myBookArr.length; i++) {
-    if(this.myBookArr[i].title.toLowerCase().indexOf(title.toLowerCase() > -1 && title)) {
-    titleArr.push(this.myBookArr[i]);
+    if(this.myBookArr[i].title.toLowerCase().indexOf(getTitleInput.toLowerCase() > -1 && getTitleInput)) {
+    titleArr.push(this.myBookArr[i]); //how do i clear this array? why is every single book being pushed when $("#book-by-title-input") logs out with the correct title? WHAT THE FUCK?!!!!!!!
       }
     }
-    return titleArr;
+    $(".remove-item").remove();
+    for(var i = 0; i < titleArr.length; i++){
+      div = $("<div>"+titleArr[i].title+"</div>").addClass("remove-item");
+    $("#results-jumbotron").append(div);
+    console.log(titleArr)
+  }
 };
 
 /////////////////////////////////////////////////////////getBooksByAuthor////////////////////////////////////////////////////////////////////////
@@ -173,7 +185,10 @@ Library.prototype.getBooksByAuthor = function(author) {
       byAuthorArr.push(this.myBookArr[i]);
     }
   }
-  return byAuthorArr;
+  // $(".remove-item").remove();
+  // for(var i = 0; i < authorListArr.length; i++){
+  //   div = $("<div>"+authorListArr[i]+"</div>").addClass("remove-item");
+  // $("#results-jumbotron").append(div);
 };
 
 ////////////////////////////////////////////////////////////addBooks/////////////////////////////////////////////////////////////////////
@@ -208,7 +223,10 @@ Library.prototype.addBooks = function(addBooksArr) {
   //////////////////////////////////////////////////////////getRandomAuthorName///////////////////////////////////////////////////////////////
   Library.prototype.getRandomAuthorName = function() {
     var randomAuthor = Math.floor(Math.random()*this.myBookArr.length);
-    return this.myBookArr.length <= 0 ? null : this.myBookArr[randomAuthor].author;
+    var randomAuthorDisplay = this.myBookArr.length <= 0 ? null : this.myBookArr[randomAuthor].author;
+    $(".remove-item").remove();
+      div = $("<div>"+randomAuthorDisplay+"</div>").addClass("remove-item");
+    $("#results-jumbotron").append(div);
   };
 
 /////////////////////////////////////////////////////////Search/////////////////////////////////////////////////////////////////////////////
