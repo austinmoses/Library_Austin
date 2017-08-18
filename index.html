@@ -16,7 +16,7 @@
     <div class="library-container col-md-5 ">
       <h3 class="library-labels col-md-4">Search Library</h3>
       <br></br>
-        <form class="search">
+        <form action="javascript:void(0)" class="search">
         <div class="form-group">
           <label class="form-label">Title:</label>
           <input id="titleInput" type="text" class="form-control" placeholder="Title">
@@ -29,13 +29,13 @@
           <label class="form-label">Pages:</label>
           <input id="pagesInput" type="text" class="form-control" placeholder="Pages">
         </div>
-        <button id="searchSubmit" type="submit" class="btn btn-default">Submit</button>
+        <button id="search-submit" type="submit" class="btn btn-default">Submit</button>
       </form>
     </div>
-    <div class="results-container col-md-5">
-      <h3 class="library-labels col-md-4">Results</h3>
+    <div class="results-container col-md-6">
+      <h3 class="library-labels col-md-4">Search Results</h3>
       <br></br>
-      <div class="jumbotron jumbotron-fluid jumbotron-style">
+      <div id="search-results-display" class="jumbotron jumbotron-fluid jumbotron-style">
 
       </div>
     </div>

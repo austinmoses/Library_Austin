@@ -9,7 +9,41 @@ var Book = function(oArgs){
   this.numPages = oArgs.numPages;
   this.pDate = new Date(oArgs.date);
 };
+//////////////////////////////////////////////////////////////table constructor//////////////////////////////////////////////
+var Table = function(array, jumbotron) {
+  var libTableNew = $("<table>").addClass("remove-item table table-bordered");
+  var newTableHead = $("<tr>");
 
+  var titleHead = $("<th>").text("Title");
+  var authorHead = $("<th>").text("Author");
+  var pagesHead = $("<th>").text("Page Length");
+  var dateHead = $("<th>").text("Publication Date");
+
+  newTableHead.append(titleHead);
+  newTableHead.append(authorHead);
+  newTableHead.append(pagesHead);
+  newTableHead.append(dateHead);
+  libTableNew.append(newTableHead);
+
+  $(".remove-item").remove();
+  for(var i = 0; i < array.length; i++){
+    var newRow = $("<tr>");
+    var titleLoad = $("<td>").text(array[i].title);
+    var authorLoad = $("<td>").text(array[i].author);
+    var pagesLoad = $("<td>").text(array[i].numPages);
+    var pDateLoad = $("<td>").text(array[i].pDate);
+
+    newRow.append(titleLoad);
+    newRow.append(authorLoad);
+    newRow.append(pagesLoad);
+    newRow.append(pDateLoad);
+    libTableNew.append(newRow);
+
+$(jumbotron).append(libTableNew);
+ }
+};
+
+//////////////////////////////////////////////////////////////table constructor end///////////////////////////////////////
 var inputBook = function(){
   this.title = $("#add-title-1").val();
   this.author = $("#add-author-1").val();
@@ -22,8 +56,6 @@ Library.prototype.init = function(){
   // this._autoLoadArray();
   this._checkLocalStorage();
   this._bindEvents();
-   //recycle retreive() (get)
-  //call function to populate book array if localstorage has our book array.
 };
 
 Library.prototype._bindEvents = function(){
@@ -49,6 +81,7 @@ Library.prototype._bindEvents = function(){
   $("#get-random-author").on("click", $.proxy(this.getRandomAuthorName, this));
   $("#get-book-by-author").on("click", $.proxy(this.getBooksByAuthor, this));
   $("#submit-books-button").on("click", $.proxy(this.addBooksInput, this));
+  $("#search-submit").on("click", $.proxy(this.validateSearch, this));
 };
 
 Library.prototype._checkLocalStorage = function(){
@@ -152,20 +185,13 @@ for(i = 0; i < this.myBookArr.length; i++) {
 
 /////////////////////////////////////////////////////////////////getRandomBook///////////////////////////////////////////////////////////////////
 Library.prototype.getRandomBook = function() {
+  var randomBookContainer = new Array();
   var randomBook = Math.floor(Math.random()*this.myBookArr.length);
   var randomBookDisplay = this.myBookArr.length <= 0 ? null : this.myBookArr[randomBook];
-  var randomBookTitle = $(document.createTextNode("Title: "+randomBookDisplay.title));
-  var randomBookAuthor = $(document.createTextNode("Author: "+randomBookDisplay.author));
-  var randomBookPages = $(document.createTextNode("Page Length: "+randomBookDisplay.numPages));
-  var randomBookDate = $(document.createTextNode("Publication Date: "+randomBookDisplay.pDate));
-  $(".remove-item").remove();
-  var randomDiv = $("<div>").addClass("remove-item");
-  $(randomDiv).append(randomBookTitle);
-  $(randomDiv).append(randomBookAuthor);
-  $(randomDiv).append(randomBookPages);
-  $(randomDiv).append(randomBookDate);
-  $("#results-jumbotron").append(randomDiv);
-  console.log(randomDiv);
+  randomBookContainer.push(randomBookDisplay);
+
+  randomBookTable = new Table(randomBookContainer, $("#results-jumbotron"));
+
 };
 
 /////////////////////////////////////////////////////////////getBookByTitle/////////////////////////////////////////////////////////////////////
@@ -179,35 +205,7 @@ Library.prototype.getBookByTitle = function() {
     titleArr.push(this.myBookArr[i]); //how do i clear this array? why is every single book being pushed when $("#book-by-title-input") logs out with the correct title? WHAT THE FUCK?!!!!!!!
       }
     }
-    var byTitleResult = $("<table>").addClass("remove-item table table-bordered");
-    var newTableHead= $("<tr>");
-    var titleHead = $("<th>").text("Title");
-    var authorHead = $("<th>").text("Author");
-    var pagesHead = $("<th>").text("Page Length");
-    var dateHead = $("<th>").text("Publication Date");
-
-    newTableHead.append(titleHead);
-    newTableHead.append(authorHead);
-    newTableHead.append(pagesHead);
-    newTableHead.append(dateHead);
-    byTitleResult.append(newTableHead);
-
-    $(".remove-item").remove();
-    for(var i = 0; i < titleArr.length; i++){
-      var titleResultRow = $("<tr>")
-      var titleResultTitle = $("<td>").text(titleArr[i].title);
-      var titleResultAuthor = $("<td>").text(titleArr[i].author);
-      var titleResultPages = $("<td>").text(titleArr[i].numPages);
-      var titleResultDate = $("<td>").text(titleArr[i].pDate);
-
-      titleResultRow.append(titleResultTitle);
-      titleResultRow.append(titleResultAuthor);
-      titleResultRow.append(titleResultPages);
-      titleResultRow.append(titleResultDate);
-      byTitleResult.append(titleResultRow);
-      // div = $("<div>"+byAuthorResult+"</div>").addClass("remove-item");
-    $("#results-jumbotron").append(byTitleResult);
-  }
+    titleResultTable = new Table(titleArr, $("#results-jumbotron"))
 };
 
 /////////////////////////////////////////////////////////getBooksByAuthor////////////////////////////////////////////////////////////////////////
@@ -219,35 +217,8 @@ Library.prototype.getBooksByAuthor = function() {
       byAuthorArr.push(this.myBookArr[i]);
     }
   }
-  var byAuthorResult = $("<table>").addClass("remove-item table table-bordered");
-  var newTableHead= $("<tr>");
-  var titleHead = $("<th>").text("Title");
-  var authorHead = $("<th>").text("Author");
-  var pagesHead = $("<th>").text("Page Length");
-  var dateHead = $("<th>").text("Publication Date");
 
-  newTableHead.append(titleHead);
-  newTableHead.append(authorHead);
-  newTableHead.append(pagesHead);
-  newTableHead.append(dateHead);
-  byAuthorResult.append(newTableHead);
-
-  $(".remove-item").remove();
-  for(var i = 0; i < byAuthorArr.length; i++){
-    var authorResultRow = $("<tr>");
-    var authorResultTitle = $("<td>").text(byAuthorArr[i].title);
-    var authorResultAuthor = $("<td>").text(byAuthorArr[i].author);
-    var authorResultPages = $("<td>").text(byAuthorArr[i].numPages);
-    var authorResultDate = $("<td>").text(byAuthorArr[i].pDate);
-
-    authorResultRow.append(authorResultTitle);
-    authorResultRow.append(authorResultAuthor);
-    authorResultRow.append(authorResultPages);
-    authorResultRow.append(authorResultDate);
-    byAuthorResult.append(authorResultRow);
-    // div = $("<div>"+byAuthorResult+"</div>").addClass("remove-item");
-  $("#results-jumbotron").append(byAuthorResult);
-}
+  var byAuthorTable = new Table(byAuthorArr, $("#results-jumbotron"));
 };
 
 ////////////////////////////////////////////////////////////addBooks/////////////////////////////////////////////////////////////////////
@@ -365,7 +336,7 @@ Library.prototype.search = function(titleInput, authorInput, pagesInput) {
       }
     }
   }
-  return searchResults;
+  var searchResultsDisplay = new Table(searchResults, $("#search-results-display"));
 };
 
 
@@ -388,20 +359,15 @@ window.BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", autho
 window.BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
 window.BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "06/02/1999"});
 window.BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "04/10/1925"});
-window.BookSix = new Book({title: "This Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
+window.BookSix = new Book({title: "The Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
 window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
 
 ///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
 
 Library.prototype._autoPush = function () {
+  if(this.myBookArr.length == 0){
+    this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
+  }
   var storageContainer = JSON.stringify(this.myBookArr);
   localStorage.setItem(this.instanceKey, storageContainer);
 };
-
-Library.prototype._autoLoadArray = function(){
-  this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
-};
-
-// Library.prototype.retrieve = function(libInstance) {
-//   return JSON.parse(localStorage.getItem(this.instanceKey));
-// };
