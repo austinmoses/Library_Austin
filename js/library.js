@@ -43,12 +43,19 @@ $(jumbotron).append(libTableNew);
  }
 };
 
+Library.prototype.count = function(){
+  var counter = 0;
+  return counter += 1;
+}
 //////////////////////////////////////////////////////////////table constructor end///////////////////////////////////////
 var inputBook = function(){
-  this.title = $("#add-title-1").val();
-  this.author = $("#add-author-1").val();
-  this.numPages = $("#add-pages-1").val();
-  this.pDate = new Date(String($("#add-title-1").val()));
+
+  // var counter = this.count;
+
+  this.title = $("#add-title").val();
+  this.author = $("#add-author").val();
+  this.numPages = $("#add-pages").val();
+  this.pDate = new Date(String($("#add-title"+counter).val()));
 };
 
 Library.prototype.init = function(){
@@ -129,11 +136,22 @@ Library.prototype._handleGetMyName = function(){
 Library.prototype.addBookForm = function(){
   var addBookForm = $("#add-book-form");
   var newForm = $('<form class="form-inline">')
+  // var counter = this.count();
 
-  $(newForm).append('<input type="text" class="form-control" placeholder="Title"/>');
-  $(newForm).append('<input type="text" class="form-control" placeholder="Author"/>');
-  $(newForm).append('<input type="text" class="form-control" placeholder="Page Length"/>');
-  $(newForm).append('<input type="text" class="form-control" placeholder="Publcation Date"/><br></br>');
+  // if(counter >= 5){
+  //   alert("Only 5 Books at a Time, Please!")
+  //   return
+  //}
+
+  var newTitleInput = $('<input type="text" class="form-control" placeholder="Title"/>').attr("id", "add-title");
+  var newAuthorInput = $('<input type="text" class="form-control" placeholder="Author"/>').attr("id", "add-author");
+  var newPagesInput = $('<input type="text" class="form-control" placeholder="Page Length"/>').attr("id", "add-pages");
+  var newDateInput = $('<input type="text" class="form-control" placeholder="Publcation Date"/><br></br>').attr("id", "add-date-");
+
+  $(newForm).append(newTitleInput);
+  $(newForm).append(newAuthorInput);
+  $(newForm).append(newPagesInput);
+  $(newForm).append(newDateInput);
   $("#add-book-form").append(newForm);
 };
 
@@ -233,10 +251,36 @@ Library.prototype.addBooks = function(addBooksArr) {
   };
 
   Library.prototype.addBooksInput = function() {
-    var booksInput = new inputBook;
+    var booksInput = new inputBook($("#add-books-form").each(this.addBooksInput(index, value)));
+    // var booksInput2 = new inputBook;
+    // var booksInput3 = new inputBook;
+    // var booksInput4 = new inputBook;
+    // var booksInput5 = new inputBook;
+
     var addBooksArr = new Array();
     var numberBooksAdded = 0;
-    addBooksArr.push(booksInput);
+
+
+    // if(booksInput1){
+    //   addBooksArr.push(booksInput1);
+    // }
+    //
+    // if(booksInput2){
+    //   addBooksArr.push(booksInput2);
+    // }
+    //
+    // if(booksInput3){
+    //   addBooksArr.push(booksInput3);
+    // }
+    //
+    // if(booksInput4){
+    //   addBooksArr.push(booksInput4);
+    // }
+    //
+    // if(booksInput5){
+    //   addBooksArr.push(booksInput5);
+    // }
+
     for(i = 0; i < addBooksArr.length; i++) {         //we use this for loop to loop through the iterations of the loop we're passing through. In other words, the loop we're iterating through does not exist until we pass it into our function.
       if(this.addBook(addBooksArr[i])){
       numberBooksAdded++
