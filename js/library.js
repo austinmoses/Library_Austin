@@ -86,7 +86,7 @@ Library.prototype._bindEvents = function(){
 };
 
 Library.prototype._checkLocalStorage = function(){
-  var libLoad = JSON.parse(localStorage.getItem(this.instanceKey)) || this.autoLoadArray() && this._autoPush();
+  var libLoad = JSON.parse(localStorage.getItem(this.instanceKey)) || this._ifNoStorage();
   this.myBookArr = libLoad;
   this._loadLibrary($("#libTable"));
 };
@@ -367,12 +367,16 @@ window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 
 
 ///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
 Library.prototype._autoLoadArray = function(){
-  if(this.myBookArr.length == 0){
     this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive]);
-  }
 };
 
 Library.prototype._autoPush = function () {
   var storageContainer = JSON.stringify(this.myBookArr);
   localStorage.setItem(this.instanceKey, storageContainer);
+};
+
+Library.prototype._ifNoStorage = function () {
+  this._autoLoadArray();
+  this._autoPush();
+  return this.myBookArr;
 };
