@@ -84,14 +84,9 @@
   <div class="col-md-7">
   <button id="add-book-expand" type="button" class="btn btn-primary button-space col-md-10 col-md-offset-1">Add Book(s)</button><br></br><br></br>
   <div id="add-book-content">
-    <div id="add-book-form">
-    <form id="add-books-form" class="form-inline">
-      <input id="add-title" type="text" class="form-control" placeholder="Title"/>
-      <input id="add-author"type="text" class="form-control" placeholder="Author"/>
-      <input id="add-pages"type="text" class="form-control" placeholder="Page Length"/>
-      <input id="add-date"type="text" class="form-control" placeholder="Publcation Date"/><br></br>
-    </form>
-    </div>
+    <ul class="multi-add-form">
+    <li><form id="add-books-form" class="form-inline"><input type="text" class="form-control multi-add-title" placeholder="Title"/><input type="text" class="form-control multi-add-author" placeholder="Author"/><input type="text" class="form-control multi-add-pages" placeholder="Page Length"/><input type="text" class="form-control multi-add-date" placeholder="Publcation Date"/><br></br></form></li>
+    </ul>
       <button id="add-books-button" type="button" class="btn btn-primary">Add Book</button>
       <button id="submit-books-button" type="button" class="btn btn-primary">Submit Books</button>
   </div>

@@ -9,6 +9,13 @@ var Book = function(oArgs){
   this.numPages = oArgs.numPages;
   this.pDate = new Date(oArgs.date);
 };
+
+var inputBook = function(jLi){
+  this.title = $(jLi).find("input:nth-child(1)").val();
+  this.author = $(jLi).find("input:nth-child(2)").val();
+  this.numPages = $(jLi).find("input:nth-child(3)").val();
+  this.pDate = new Date(String($(jLi).find("input:nth-child(4)").val()));
+};
 //////////////////////////////////////////////////////////////table constructor//////////////////////////////////////////////
 var Table = function(array, jumbotron) {
   var libTableNew = $("<table>").addClass("remove-item table table-bordered");
@@ -43,24 +50,11 @@ $(jumbotron).append(libTableNew);
  }
 };
 
-Library.prototype.count = function(){
-  var counter = 0;
-  return counter += 1;
-}
 //////////////////////////////////////////////////////////////table constructor end///////////////////////////////////////
-var inputBook = function(){
 
-  // var counter = this.count;
-
-  this.title = $("#add-title").val();
-  this.author = $("#add-author").val();
-  this.numPages = $("#add-pages").val();
-  this.pDate = new Date(String($("#add-title"+counter).val()));
-};
 
 Library.prototype.init = function(){
   //cache selectors into variables
-  // this._autoLoadArray();
   this._checkLocalStorage();
   this._bindEvents();
 };
@@ -87,12 +81,12 @@ Library.prototype._bindEvents = function(){
   $("#get-book-by-title").on("click", $.proxy(this.getBookByTitle, this));
   $("#get-random-author").on("click", $.proxy(this.getRandomAuthorName, this));
   $("#get-book-by-author").on("click", $.proxy(this.getBooksByAuthor, this));
-  $("#submit-books-button").on("click", $.proxy(this.addBooksInput, this));
+  $("#submit-books-button").on("click", $.proxy(this.multiAdd, this));
   $("#search-submit").on("click", $.proxy(this.validateSearch, this));
 };
 
 Library.prototype._checkLocalStorage = function(){
-  var libLoad = JSON.parse(localStorage.getItem(this.instanceKey)) || this._autoPush();
+  var libLoad = JSON.parse(localStorage.getItem(this.instanceKey)) || this.autoLoadArray() && this._autoPush();
   this.myBookArr = libLoad;
   this._loadLibrary($("#libTable"));
 };
@@ -134,25 +128,21 @@ Library.prototype._handleGetMyName = function(){
 };
 
 Library.prototype.addBookForm = function(){
-  var addBookForm = $("#add-book-form");
+  var addBookForm = $(".multi-add-form");
+  var addBookLi = $("<li>")
   var newForm = $('<form class="form-inline">')
-  // var counter = this.count();
 
-  // if(counter >= 5){
-  //   alert("Only 5 Books at a Time, Please!")
-  //   return
-  //}
-
-  var newTitleInput = $('<input type="text" class="form-control" placeholder="Title"/>').attr("id", "add-title");
-  var newAuthorInput = $('<input type="text" class="form-control" placeholder="Author"/>').attr("id", "add-author");
-  var newPagesInput = $('<input type="text" class="form-control" placeholder="Page Length"/>').attr("id", "add-pages");
-  var newDateInput = $('<input type="text" class="form-control" placeholder="Publcation Date"/><br></br>').attr("id", "add-date-");
+  var newTitleInput = $('<input type="text" class="form-control mult-add-title" placeholder="Title"/>')
+  var newAuthorInput = $('<input type="text" class="form-control multi-add-author" placeholder="Author"/>')
+  var newPagesInput = $('<input type="text" class="form-control multi-add-pages" placeholder="Page Length"/>')
+  var newDateInput = $('<input type="text" class="form-control multi-add-date" placeholder="Publcation Date"/><br></br>')
 
   $(newForm).append(newTitleInput);
   $(newForm).append(newAuthorInput);
   $(newForm).append(newPagesInput);
   $(newForm).append(newDateInput);
-  $("#add-book-form").append(newForm);
+  $(addBookLi).append(newForm);
+  $(".multi-add-form").append(addBookLi);
 };
 
 /////////////////////////////////////////////////////////////Add Book/////////////////////////////////////////////////////////////////
@@ -160,7 +150,6 @@ Library.prototype.addBook = function(book){
   var bool = false
   for(i = 0; i < this.myBookArr.length; i++){
     if(this.myBookArr[i].title == book.title){
-      // alert("At Least One Book Already in Library");
     }
   }
   this.myBookArr.push(book);
@@ -189,15 +178,14 @@ for(i = 0; i < this.myBookArr.length; i++){
 Library.prototype.removeBookByAuthor = function() {
 var bool = false;
 var authorRemoveIn = $("#remove-author-input").val();
-// var reg = new RegExp(author, "gi")
 for(i = 0; i < this.myBookArr.length; i++) {
-  if(this.myBookArr[i].author.toLowerCase().indexOf(authorRemoveIn.toLowerCase()) > -1 && authorRemoveIn) {
+  if(this.myBookArr[i].author.toLowerCase().indexOf(authorRemoveIn.toLowerCase()) > -1) {
     this.myBookArr.splice(i,1);
-    this._autoPush();
-    this._checkLocalStorage();
     bool = true;
     }
   }
+  this._autoPush();
+  this._checkLocalStorage();
   return bool;
 };
 
@@ -240,54 +228,25 @@ Library.prototype.getBooksByAuthor = function() {
 };
 
 ////////////////////////////////////////////////////////////addBooks/////////////////////////////////////////////////////////////////////
+Library.prototype.multiAdd = function(){
+  var multiAddArr = new Array();
+  $("ul.multi-add-form li").each(function(){
+    var bookInput = new inputBook(this);
+    multiAddArr.push(bookInput);
+  });
+  this.addBooks(multiAddArr);
+  console.log(multiAddArr);
+};
+
 Library.prototype.addBooks = function(addBooksArr) {
   var numberBooksAdded = 0;
-  for(i = 0; i < addBooksArr.length; i++) {         //we use this for loop to loop through the iterations of the loop we're passing through. In other words, the loop we're iterating through does not exist until we pass it into our function.
-    if(this.addBook(addBooksArr[i])){
-    numberBooksAdded++
+  for(a = 0; a < addBooksArr.length; a++) {         //we use this for loop to loop through the iterations of the loop we're passing through. In other words, the loop we're iterating through does not exist until we pass it into our function.
+    this.addBook(addBooksArr[a]);
+    console.log(addBooksArr);
     }
-  }
-    return numberBooksAdded;
   };
 
-  Library.prototype.addBooksInput = function() {
-    var booksInput = new inputBook($("#add-books-form").each(this.addBooksInput(index, value)));
-    // var booksInput2 = new inputBook;
-    // var booksInput3 = new inputBook;
-    // var booksInput4 = new inputBook;
-    // var booksInput5 = new inputBook;
 
-    var addBooksArr = new Array();
-    var numberBooksAdded = 0;
-
-
-    // if(booksInput1){
-    //   addBooksArr.push(booksInput1);
-    // }
-    //
-    // if(booksInput2){
-    //   addBooksArr.push(booksInput2);
-    // }
-    //
-    // if(booksInput3){
-    //   addBooksArr.push(booksInput3);
-    // }
-    //
-    // if(booksInput4){
-    //   addBooksArr.push(booksInput4);
-    // }
-    //
-    // if(booksInput5){
-    //   addBooksArr.push(booksInput5);
-    // }
-
-    for(i = 0; i < addBooksArr.length; i++) {         //we use this for loop to loop through the iterations of the loop we're passing through. In other words, the loop we're iterating through does not exist until we pass it into our function.
-      if(this.addBook(addBooksArr[i])){
-      numberBooksAdded++
-      }
-    }
-      return numberBooksAdded;
-    };
   //////////////////////////////////////////////////////////////getAuthors/////////////////////////////////////////////////////////////////////
   Library.prototype.getAuthors = function() {
     var authorListArr = new Array();
@@ -407,11 +366,13 @@ window.BookSix = new Book({title: "The Shining", author: "Stephen King", numPage
 window.BookSeven = new Book({title: "Scale", author: "Keith Buckley", numPages: 248, date: "12/15/2015"});
 
 ///////////////////////////////////////////////////////////////localStorage///////////////////////////////////////////////////////////////////
+Library.prototype._autoLoadArray = function(){
+  if(this.myBookArr.length == 0){
+    this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive]);
+  }
+};
 
 Library.prototype._autoPush = function () {
-  if(this.myBookArr.length == 0){
-    this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
-  }
   var storageContainer = JSON.stringify(this.myBookArr);
   localStorage.setItem(this.instanceKey, storageContainer);
 };
