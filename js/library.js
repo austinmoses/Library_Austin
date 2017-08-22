@@ -205,7 +205,6 @@ Library.prototype.getBookByTitle = function() {
   var titleArr = new Array();
   var getTitleInput = $("#book-by-title-input").val();
   titleArr.splice(0, titleArr.length);
-  console.log(getTitleInput);
   for(i = 0; i < this.myBookArr.length; i++) {
     if(this.myBookArr[i].title.toLowerCase().indexOf(getTitleInput.toLowerCase()) > -1) {
     titleArr.push(this.myBookArr[i]); //how do i clear this array? why is every single book being pushed when $("#book-by-title-input") logs out with the correct title? WHAT THE FUCK?!!!!!!!
@@ -235,14 +234,12 @@ Library.prototype.multiAdd = function(){
     multiAddArr.push(bookInput);
   });
   this.addBooks(multiAddArr);
-  console.log(multiAddArr);
 };
 
 Library.prototype.addBooks = function(addBooksArr) {
   var numberBooksAdded = 0;
   for(a = 0; a < addBooksArr.length; a++) {         //we use this for loop to loop through the iterations of the loop we're passing through. In other words, the loop we're iterating through does not exist until we pass it into our function.
     this.addBook(addBooksArr[a]);
-    console.log(addBooksArr);
     }
   };
 
@@ -359,7 +356,7 @@ window.denverLib.init();
 ////////////////////////////////////////////////////////////////Books//////////////////////////////////////////////////////////////////////
 window.BookOne = new Book({title: "IT", author: "Stephen King", numPages: 1138, date: "09/01/1986"});
 window.BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", author: "JK Rowling", numPages: 400, date: "09/01/1998"});
-window.BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
+window.BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 2000000, date: "08/08/2017"});
 window.BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "06/02/1999"});
 window.BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "04/10/1925"});
 window.BookSix = new Book({title: "The Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
