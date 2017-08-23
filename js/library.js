@@ -44,7 +44,7 @@ Library.prototype.newTable = function(array, jumbotron) {
   };
 
   Library.prototype._autoLoadArray = function(){
-      this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive]);
+      this.addBooks([BookOne, BookTwo, BookThree, BookFour, BookFive, BookSix, BookSeven]);
   };
 
   Library.prototype._autoPush = function () {
@@ -313,7 +313,7 @@ window.denverLib.init();
 ////////////////////////////////////////////////////////////////Books//////////////////////////////////////////////////////////////////////
 window.BookOne = new Book({title: "IT", author: "Stephen King", numPages: 1138, date: "09/01/1986"});
 window.BookTwo = new Book({title: "Harry Potter and the Sorcerer's Stone", author: "JK Rowling", numPages: 400, date: "09/01/1998"});
-window.BookThree = new Book({title: "Fuck you Javascript", author: "Austin Moses", numPages: 000000, date: "08/08/2017"});
+window.BookThree = new Book({title: "F**k you Javascript", author: "Austin Moses", numPages: 1000000, date: "08/08/2017"});
 window.BookFour = new Book({title: "Harry Potter 2", author: "JK Rowling", numPages: 450, date: "06/02/1999"});
 window.BookFive = new Book({title: "The Great Gatsby", author: "F. Scott Fitzgerald", numPages: 215, date: "04/10/1925"});
 window.BookSix = new Book({title: "The Shining", author: "Stephen King", numPages:447, date: "01/28/1977"});
