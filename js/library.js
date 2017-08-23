@@ -135,6 +135,7 @@ var authorRemoveIn = $("#remove-author-input").val();
 for(i = 0; i < this.myBookArr.length; i++) {
   if(this.myBookArr[i].author.toLowerCase().indexOf(authorRemoveIn.toLowerCase()) > -1) {
     this.myBookArr.splice(i,1);
+    i--;
     bool = true;
     }
   }
@@ -151,7 +152,6 @@ Library.prototype.getRandomBook = function() {
   randomBookContainer.push(randomBookDisplay);
 
   this.newTable(randomBookContainer, $("#results-jumbotron"));
-
 };
 
 Library.prototype.getBookByTitle = function() {
@@ -164,7 +164,7 @@ Library.prototype.getBookByTitle = function() {
       }
     }
     $("#book-by-title-input").val("");
-    this.newTable(titleArr, $("#results-jumbotron"))
+    this.newTable(titleArr, $("#results-jumbotron"));
 };
 
 Library.prototype.getBooksByAuthor = function() {
@@ -219,7 +219,6 @@ Library.prototype.getAuthors = function() {
     )
   }
 };
-
 
 Library.prototype.getRandomAuthorName = function() {
   var randomAuthor = Math.floor(Math.random()*this.myBookArr.length);
