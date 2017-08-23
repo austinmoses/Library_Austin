@@ -2,10 +2,131 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Library</title>
+    <title>Denver Library</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/bootstrap.css">
   </head>
   <body>
-    <h2>Library Project</h2>
-    <script type="text/javascript" src="library.js"></script>
+  <div class="container-fluid">
+  <div class="header-image row">
+    <div class="header-text-block">
+    <h2 class="header-text col-md-4 col-md-offset-4">Denver Library</h2>
+    </div>
+  </div>
+
+  <div class="display-container no-gutter row">
+    <div class="library-container col-md-5 ">
+      <h3 class="library-labels">Search Library</h3>
+        <span>
+        <form action="javascript:void(0)" class="search">
+        <div class="form-group">
+          <label class="form-label">Title:</label>
+          <input id="titleInput" type="text" class="form-control form-clear" placeholder="Title">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Author:</label>
+          <input id="authorInput" type="text" class="form-control form-clear" placeholder="Author">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pages:</label>
+          <input id="pagesInput" type="number" class="form-control form-clear" placeholder="Pages">
+        </div>
+        <button id="search-submit" type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+    <div class="results-container col-md-6">
+      <h3 class="library-labels">Search Results</h3>
+      <div class="jumbotron jumbotron-fluid jumbotron-style">
+        <table class="table">
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Page Length</th>
+            <th>Publication Date</th>
+          </tr>
+          <tbody id="search-results-display"></tbody>
+        </table>
+      </div>
+    </div>
+</div>
+
+<!-- <input class="my-name"/>
+<button class="get-my-name">Alert My Name</button> -->
+
+  <div class="browse-container no-gutter row">
+    <div class="col-md-6">
+    <h3 class="browse-label">Browse Library</h3>
+    <div id="libraryContent" class="jumbotron jumbotron-fluid jumbotron-style">
+      <table class="table">
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Page Length</th>
+          <th>Pub. Date</th>
+        </tr>
+        <tbody id="libTable"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-2 browse-line-height">
+    <h3 class="browse-label">Refine by:</h3>
+    <div class="browse-button btn-group-vertical">
+      <button id="book-by-title-expand" type="button" class="btn btn-primary">Refine by Book</button> <!--getBookByTitle-->
+      <form action="javascript:void(0)" id="book-by-title-content" class="form-group browse-line-height">
+        <input id="book-by-title-input" type="text" class="form-control form-clear" placeholder="Title"/>
+        <button id="get-book-by-title" type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <button id="book-by-author-expand" type="button" class="btn btn-primary">Refine by Author Info</button> <!--getBookByAuthor-->
+      <form action="javascript:void(0)" id="book-by-author-content" class="form-group browse-line-height">
+        <input id="book-by-author-input" type="text" class="form-control form-clear" placeholder="Author"/>
+        <button id="get-book-by-author" type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <button id="get-authors" type="button" class="btn btn-primary">Author Directory</button> <!--getAuthors & getRandomAuthorName-->
+      <button id="get-random-book" type="button" class="btn btn-primary">Get Random Book</button>
+      <button id="get-random-author" type="button" class="btn btn-primary">Get Random Author</button>
+    </div>
+  </div>
+    <div class="results-container col-md-4">
+      <h3 class="browse-label">Refined Results</h3>
+      <div class="jumbotron jumbotron-fluid jumbotron-style">
+        <table class="table">
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Page Length</th>
+            <th>Pub. Date</th>
+          </tr>
+          <tbody id="results-jumbotron"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="edit-header no-gutter row">
+    <h3 class="edit-label">Edit Library</h3>
+  </div>
+  <div class="display-container no-gutter row">
+  <div class="col-md-7">
+  <button id="add-book-expand" type="button" class="btn btn-primary button-space col-md-10 col-md-offset-1">Add Book(s)</button><br></br><br></br>
+  <div id="add-book-content">
+    <ul class="multi-add-form">
+    <li><form action:"javascript:void(0)"id="add-books-form" class="form-inline"><input type="text" class="form-clear form-control multi-add-title" placeholder="Title"/><input type="text" class="form-clear form-control multi-add-author" placeholder="Author"/><input type="number" class="form-clear form-control multi-add-pages" placeholder="Page Length"/><input type="date" class="form-clear form-control multi-add-date" placeholder="Publcation Date"/><br></br></form></li>
+    </ul>
+      <button id="add-books-button" type="button" class="btn btn-primary">Add Book</button>
+      <button id="submit-books-button" type="submit" class="btn btn-primary">Submit Books</button>
+  </div>
+  </div>
+  <div class="col-md-5">
+  <button id="remove-book-expand" type="button" class="btn btn-primary button-space col-md-10">Remove Book(s)</button><br></br><br></br>
+    <form action="javascript:void(0)" id="remove-book-content">
+      <input id="remove-title-input" type="text" class="form-control col-md-2 form-clear" placeholder="Remove Book by Title"/><br></br>
+      <button id="remove-title-button" type="submit" class="btn btn-primary">Remove Book</button><br></br>
+      <input id="remove-author-input" type="text" class="form-control col-md-2 form-clear" placeholder="Remove Book(s) by Author"/><br></br>
+      <button id="remove-author-button" type="submit" class="btn btn-primary">Remove Book</button>
+    </form>
+  </div>
+</div>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/library.js"></script>
   </body>
 </html>

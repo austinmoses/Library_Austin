@@ -1,0 +1,19 @@
+Program Title: Library_Austin
+Author: Austin Moses
+
+I started this project by creating a series of functions in JavaScript that a typical library might use on both the consumer and management sides. The JavaScript was built using an inheritance prototype design pattern in order to create new instances of the library as needed. The information is stored an array of objects (books) with the attributes Title, Author, Number of Pages, and Publication date. Local Storage is also utilized to store down each instance of the library to the users local browser. At this point, all functions were originally designed to be called and displayed in the console with no page or application for user interface. These functions include:
+
+-Add Book - Allows the user to add a book with the attributes of Title, Author, Number of Pages, and Publication Date.
+-Remove Book by Title - Allows the user to remove a book from a library by selecting it by it's title.
+-Remove Book by Author - Allows the user to remove all books from a library by a certain author.
+-Get Random Book - Returns a random book and it's attributes to the user.
+-Get Book by Title - Allows the user to search for a book by its title.
+-Get Book by Author - Allows the user to search for books by their author.
+-Add Books - Leverages the Add Book function to add multiple books at a time.
+-Get Random Author Name - Returns a random author name to the user.
+-Get Authors - Returns a list of all authors found in the library.
+-Search - Allows the user to do an advanced search of the library through Title, Author, and Number of Pages.
+
+Once these functions were running to par, I created and styled a user interface page through HTML, CSS, and CSS Bootstrap. Most of the styling and spacing was created through CSS Bootstrap, while the native CSS was used for basic styling(text color, background images, etc.) and to eliminate any conflicting CSS Bootstrap styling. The user interface page includes input fields for the user to enter information into, buttons for the user to submit that information, and screens for the program to display the information the user requests. I then merged the functioning JavaScript application with the user interface page. This was done using JQuery to target the input fields in the user interface and gather and use the information submitted, as well as target the display screens to return requested information to. 
+	Upon successfully linking my JavaScript program to my user interface page, a final round of quality control was initiated in order to eliminate any small bugs that still remained and to add detailed functionality such as clearing input forms upon submission and use of the “enter” key to submit forms. Some final styling touches were added through CSS to polish off a final product.
+
