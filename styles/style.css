@@ -13,14 +13,21 @@ body .container-fluid {
   background-repeat: no-repeat;
 }
 
+.header-text-block {
+  background-color: black;
+}
+
 .header-text {
-  /*font-family: sans-serif;*/
+  background: rgba(0, 0, 0, .9);
+  border: 4px solid #0FF;
+  border-radius: 10px;
+  padding: 10px;
   font-size: 4em;
   text-align: center;
   position: center, center;
-  color: #0FF;
+  color: #FFF;
   text-shadow:
-    0 0 5px #0ff,
+    0 0 5px #fff,
     0 0 10px #fff,
     0 0 20px #fff,
     0 0 40px #0ff,
